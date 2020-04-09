@@ -6,6 +6,8 @@ use App\BlogPost;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Carbon\Carbon;
+use Config;
 
 class PostTest extends TestCase
 {
@@ -69,7 +71,7 @@ class PostTest extends TestCase
 
     public function testUpdateValid(){
         $post = $this->createDummyBlogPost();
-
+        // dd($post);
         $this->assertDatabaseHas('blog_posts', $post->toArray());
 
         $params = [
@@ -108,4 +110,6 @@ class PostTest extends TestCase
 
         return $post;
     }
+
+
 }
