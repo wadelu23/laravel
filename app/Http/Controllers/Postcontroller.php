@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\BlogPost;
 use App\Http\Requests\StorePost;
+// use Illuminate\Support\Facades\DB;
 
 class Postcontroller extends Controller
 {
@@ -15,7 +16,33 @@ class Postcontroller extends Controller
      */
     public function index()
     {
-        $posts = BlogPost::all();
+        //Lazy Loading vs Eager Loading
+        // DB::connection()->enableQueryLog();
+        // $posts = BlogPost::with('comments')->get();
+        // foreach($posts as $post){
+        //     foreach($post->comments as $comment){
+        //         echo $comment->content;
+        //     }
+        // }
+        // dd(DB::getQueryLog());
+
+        /**Query relationship existence
+         * BlogPost::has('comments')->get();
+         * $posts = BlogPost::has('comments','>=',2)->get();
+         * $posts = BlogPost::whereHas('comments,function($query){
+         *  $query->where('content','like','%abc%');
+         * })->get();
+         */
+        /**Query relationship absence
+         * BlogPost::doesntHave('comments')->get();
+         * $posts = BlogPost::whereDoesntHave('comments',function($query){$query->where('content','like','%abc%');})->get();
+         */
+        /**Counting related models
+         * $posts = BlogPost::withCount('comments')->get();
+         * BlogPost::withCount(['comments','comments as new_comments' => function($query){ $query->where('created_at','>=','2020-04-10 12:31:48');}])->get();
+         */
+
+        $posts = BlogPost::withCount('comments')->get();
         return view('posts.index',compact('posts'));
     }
 
